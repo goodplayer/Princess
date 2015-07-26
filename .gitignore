@@ -25,3 +25,7 @@ _testmain.go
 
 # executable files
 /Princess
+
+# idea/webstorm
+/.idea
+

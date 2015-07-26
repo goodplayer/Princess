@@ -26,8 +26,11 @@ func NewTemplateModel(c *gin.Context) gin.H {
 //================================
 
 func RegisterRoute(r *gin.Engine) {
-	//TODO
 	loadHTMLGlob(r, path.Join(config.GLOBAL_CONFIG.TemplatePath, "*"), registerDefaultFunctions)
+
+	r.GET("/", IndexAction)
+
+	r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)
 
 	r.NoRoute(NoRouteHandler)
 }
