@@ -39,7 +39,7 @@ func ExampleUserGetById(t *testing.T) {
 	initDb()
 
 	user := NewUser()
-	user.Id = 7
+	user.Id = 8
 
 	err := user.GetUserById()
 	if err != nil {

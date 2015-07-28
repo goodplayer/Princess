@@ -11,3 +11,7 @@ import (
 func IndexAction(c *gin.Context) {
 	c.HTML(http.StatusOK, "index.html", NewTemplateModel(c))
 }
+
+func LoginAction(c *gin.Context) {
+
+}
