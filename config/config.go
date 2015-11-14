@@ -28,10 +28,10 @@ type Config struct {
 		DbMaxCount int    `toml:"db_max_count"`
 	} `toml:"db"`
 
-	FastcgiConfig struct {
+	HttpConfig struct {
 		Enable bool   `toml:"enable"`
 		Bind   string `toml:"bind"`
-	} `toml:"fastcgi"`
+	} `toml:"http"`
 }
 
 func Load(path string) *Config {

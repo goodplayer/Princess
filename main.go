@@ -32,31 +32,31 @@ func main() {
 
 	// start fastcgi
 	go func() {
-		if config.GLOBAL_CONFIG.FastcgiConfig.Enable {
-			startFastCgi(r)
+		if config.GLOBAL_CONFIG.HttpConfig.Enable {
+			var err error = nil
+			if gin.IsDebugging() {
+				log.Printf("[GIN-debug] Listening and serving HTTP on %s\n", config.GLOBAL_CONFIG.HttpConfig.Bind)
+			}
+			defer func() {
+				if err != nil && gin.IsDebugging() {
+					log.Printf("[GIN-debug] [ERROR] %v\n", err)
+				}
+			}()
+
+			server := &http.Server{
+				Addr:    config.GLOBAL_CONFIG.HttpConfig.Bind,
+				Handler: r,
+			}
+
+			err = server.ListenAndServe()
 		}
 	}()
 
-	var err error = nil
-	if gin.IsDebugging() {
-		log.Printf("[GIN-debug] Listening and serving HTTP on %s\n", config.GLOBAL_CONFIG.Bind)
-	}
-	defer func() {
-		if err != nil && gin.IsDebugging() {
-			log.Printf("[GIN-debug] [ERROR] %v\n", err)
-		}
-	}()
-
-	server := &http.Server{
-		Addr:    config.GLOBAL_CONFIG.Bind,
-		Handler: r,
-	}
-
-	err = server.ListenAndServe()
+	startFastCgi(r)
 }
 
 func startFastCgi(r *gin.Engine) {
-	addr, err := net.ResolveTCPAddr("tcp", config.GLOBAL_CONFIG.FastcgiConfig.Bind)
+	addr, err := net.ResolveTCPAddr("tcp", config.GLOBAL_CONFIG.Bind)
 	if err != nil {
 		panic(err)
 	}
@@ -64,7 +64,7 @@ func startFastCgi(r *gin.Engine) {
 	if err != nil {
 		panic(err)
 	}
-	log.Println("[Fastcgi] starting fastcgi on", config.GLOBAL_CONFIG.FastcgiConfig.Bind)
+	log.Println("[Fastcgi] starting fastcgi on", config.GLOBAL_CONFIG.Bind)
 	fcgi.Serve(listener, r)
 }
 
