@@ -9,6 +9,15 @@ import (
 
 import ()
 
+func TestGetTopPost(t *testing.T) {
+	initDb()
+
+	result, err := PostUtil().GetIndexPosts()
+
+	log.Println(result)
+	log.Println(err)
+}
+
 func ExamplePostSave() {
 	initDb()
 
@@ -40,7 +49,7 @@ func ExamplePostGetById() {
 	post := NewPost()
 	post.Id = 1
 
-	err := post.GetPostById()
+	err := post.FillPostById()
 	if err != nil {
 		log.Fatal(err)
 	}
