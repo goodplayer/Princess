@@ -9,14 +9,14 @@ import (
 
 import ()
 
-func ExamplePostSave(t *testing.T) {
+func ExamplePostSave() {
 	initDb()
 
 	user := NewUser()
 	user.Id = 8
 	err := user.GetUserById()
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
 
 	post := NewPost()
@@ -27,14 +27,14 @@ func ExamplePostSave(t *testing.T) {
 
 	err = post.Save()
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
 
 	log.Println(post)
 	log.Println(post.PostUser)
 }
 
-func ExamplePostGetById(t *testing.T) {
+func ExamplePostGetById() {
 	initDb()
 
 	post := NewPost()
@@ -42,7 +42,7 @@ func ExamplePostGetById(t *testing.T) {
 
 	err := post.GetPostById()
 	if err != nil {
-		t.Fatal(err)
+		log.Fatal(err)
 	}
 
 	log.Println(post)

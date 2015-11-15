@@ -18,7 +18,7 @@ func initDb() {
 	repo.InitRepo(conf)
 }
 
-func ExampleUserSave(t *testing.T) {
+func ExampleUserSave() {
 	initDb()
 
 	user := NewUser()
@@ -35,7 +35,7 @@ func ExampleUserSave(t *testing.T) {
 	}
 }
 
-func ExampleUserGetById(t *testing.T) {
+func ExampleUserGetById() {
 	initDb()
 
 	user := NewUser()
@@ -49,7 +49,7 @@ func ExampleUserGetById(t *testing.T) {
 	log.Println(user)
 }
 
-func ExampleUserGetByUsername(t *testing.T) {
+func ExampleUserGetByUsername() {
 	initDb()
 
 	user := NewUser()

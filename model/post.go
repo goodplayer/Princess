@@ -27,7 +27,7 @@ func NewPost() *Post {
 func (this *Post) Save() error {
 	this.PostTime = time.Now().UnixNano()
 	this.LastUpdateTime = this.PostTime
-	_, err := repo.DB.Exec(`
+	_, err := repo.Run().Exec(`
 INSERT INTO post(title, abstract, content, status, posttime, lastupdatetime, userid)
 VALUES ($1, $2, $3, $4, $5, $6, $7);
 	`, this.Title, this.Abstract, this.Content, this.Status, this.PostTime, this.LastUpdateTime, this.PostUser.Id)
@@ -36,7 +36,7 @@ VALUES ($1, $2, $3, $4, $5, $6, $7);
 
 func (this *Post) GetPostById() error {
 	var userId int64 = -1
-	r := repo.DB.QueryRow(`
+	r := repo.Run().QueryRow(`
 SELECT title, abstract, content, status, posttime, lastupdatetime, userid FROM post where id = $1;
 	`, this.Id)
 	e := r.Scan(&this.Title, &this.Abstract, &this.Content, &this.Status, &this.PostTime, &this.LastUpdateTime, &userId)

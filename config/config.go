@@ -32,6 +32,10 @@ type Config struct {
 		Enable bool   `toml:"enable"`
 		Bind   string `toml:"bind"`
 	} `toml:"http"`
+
+	SiteConfig struct {
+		DefaultSiteName string `toml:"default_site_name"`
+	} `toml:"site"`
 }
 
 func Load(path string) *Config {

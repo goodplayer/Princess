@@ -16,9 +16,10 @@ type TemplateCommonFunc func(interface{}) interface{}
 type TemplateFunc2 func(*gin.Context) (string, error)
 
 func NewTemplateModel(c *gin.Context) gin.H {
+	// build in template obj
 	r := gin.H{
-		"PRINCESS_CONTEXT": c,
-		"PRINCESS_COMMON":  g_TEMPLATE_COMMON_MODEL,
+		"CONTEXT": c,
+		"SITE":    g_TEMPLATE_COMMON_MODEL,
 	}
 	return r
 }
@@ -35,7 +36,10 @@ func RegisterRoute(r *gin.Engine) {
 	r.NoRoute(NoRouteHandler)
 }
 
+// register custom template functions
+
 func registerTemplateCommonModel(m map[string]interface{}) {
+	m["default_site_name"] = config.GLOBAL_CONFIG.SiteConfig.DefaultSiteName
 }
 
 func registerTemplateFunc(m map[string]TemplateFunc) {
@@ -94,6 +98,7 @@ func convertTemplateFunc2(m map[string]TemplateFunc2) template.FuncMap {
 	return rm
 }
 
+//TODO customize templates
 func loadHTMLGlob(r *gin.Engine, pattern string, templFunc func(*template.Template)) {
 	if gin.IsDebugging() {
 		if len(pattern) <= 0 {

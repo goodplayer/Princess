@@ -12,16 +12,22 @@ import (
 )
 
 var (
-	DB *sql.DB
+	db     *sql.DB
+	isOpen bool
 )
+
+func init() {
+	isOpen = false
+}
 
 func InitRepo(config *config.Config) {
 	var err error
-	DB, err = sql.Open("postgres", config.DbConfig.DbConnStr)
+	db, err = sql.Open("postgres", config.DbConfig.DbConnStr)
 	if err != nil {
 		log.Println("db error:", err)
 		panic(err)
 	}
-	DB.SetMaxIdleConns(config.DbConfig.DbMinCount)
-	DB.SetMaxOpenConns(config.DbConfig.DbMaxCount)
+	isOpen = true
+	db.SetMaxIdleConns(config.DbConfig.DbMinCount)
+	db.SetMaxOpenConns(config.DbConfig.DbMaxCount)
 }
