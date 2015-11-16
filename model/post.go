@@ -61,6 +61,19 @@ SELECT id, title, abstract, content, status, posttime, lastupdatetime, userid FR
 	}
 }
 
+func (postUtil) GetPostById(id int64) (*Post, bool, error) {
+	// return post, isExist, error
+	post := NewPost()
+	post.Id = id
+	err := post.FillPostById()
+	if err == NO_SUCH_RECORD {
+		return nil, false, nil
+	} else if err != nil {
+		return nil, false, nil
+	}
+	return post, true, nil
+}
+
 type Post struct {
 	Id             int64
 	Title          string

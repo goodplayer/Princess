@@ -30,6 +30,7 @@ func RegisterRoute(r *gin.Engine) {
 	loadHTMLGlob(r, path.Join(config.GLOBAL_CONFIG.TemplatePath, "*"), registerDefaultFunctions)
 
 	r.GET("/", IndexAction)
+	r.GET("/post/:postId", ShowPostAction)
 
 	r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)
 

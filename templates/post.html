@@ -48,20 +48,14 @@
         <!--</h1>-->
     <!--</div>-->
 
-    {{range .posts}}
     <div style="padding-bottom: 40px;">
-        <h2><a href="/post/{{ .Id }}">{{ .Title }}</a></h2>
-        作者：<a href="{{.PostUser.Id}}">{{.PostUser.Nickname}}</a>&nbsp;&nbsp;&nbsp;&nbsp;发表时间：{{with .PostTime}}{{StdDate .}}{{end}}
+        <h1>{{ .post.Title }}</h1>
+        作者：<a href="{{.PostUser.Id}}">{{.post.PostUser.Nickname}}</a>&nbsp;&nbsp;&nbsp;&nbsp;发表时间：{{with .post.PostTime}}{{StdDate .}}{{end}}
         <hr>
         <div>
-            {{.Content}}
+            {{.post.Content}}
         </div>
     </div>
-    {{else}}
-    <div>
-        <strong>no rows</strong>
-    </div>
-    {{end}}
 </div>
 
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
