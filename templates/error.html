@@ -28,7 +28,7 @@
 
 {{template "user_bar" .}}
 
-<div class="container col-md-offset-1 col-md-10" style="padding-top: 40px;">
+<div class="container col-md-offset-1 col-md-10" style="padding-top: 60px;">
     <!--<div class="">-->
         <!--<h1>{{.SITE.default_site_name}}-->
             <!--<small>subtitle...</small>-->
@@ -36,12 +36,7 @@
     <!--</div>-->
 
     <div style="padding-bottom: 40px;">
-        <h1>{{ .post.Title }}</h1>
-        作者：<a href="/user/{{.post.PostUser.Id}}">{{.post.PostUser.Nickname}}</a>&nbsp;&nbsp;&nbsp;&nbsp;发表时间：{{with .post.PostTime}}{{StdDate .}}{{end}}
-        <hr>
-        <div>
-            {{.post.Content}}
-        </div>
+        <div class="alert alert-danger" role="alert">{{.ErrorCode}}</div>
     </div>
 </div>
 

@@ -101,7 +101,7 @@ func WrapPost(r *sql.Rows) (*Post, error) {
 	}
 	user := NewUser()
 	user.Id = userId
-	err := user.GetUserById()
+	err := user.FillUserById()
 	if err != nil {
 		return nil, err
 	}
@@ -137,7 +137,7 @@ SELECT title, abstract, content, status, posttime, lastupdatetime, userid FROM p
 	}
 	user := NewUser()
 	user.Id = userId
-	err := user.GetUserById()
+	err := user.FillUserById()
 	if err != nil {
 		return err
 	}

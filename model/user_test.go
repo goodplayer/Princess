@@ -41,7 +41,7 @@ func ExampleUserGetById() {
 	user := NewUser()
 	user.Id = 8
 
-	err := user.GetUserById()
+	err := user.FillUserById()
 	if err != nil {
 		log.Println(err)
 	}
@@ -55,7 +55,7 @@ func ExampleUserGetByUsername() {
 	user := NewUser()
 	user.Username = "testuser1"
 
-	err := user.GetUserByUsername()
+	err := user.FillUserByUsername()
 	if err != nil {
 		log.Println(err)
 	}

@@ -11,12 +11,13 @@ import (
 )
 
 import (
-	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 
 	"moetang.info/prod/Princess/config"
 	"moetang.info/prod/Princess/controller"
 	"moetang.info/prod/Princess/repo"
+	"moetang.info/prod/Princess/session"
+	"moetang.info/prod/Princess/session/sessionutil"
 )
 
 func init() {
@@ -76,6 +77,15 @@ func initProcess(r *gin.Engine) {
 
 func initMiddleware(r *gin.Engine) {
 	r.Use(gin.Recovery(), gin.Logger())
-	store := sessions.NewCookieStore([]byte(config.GLOBAL_CONFIG.SessionEncryptKey))
-	r.Use(sessions.Sessions(config.GLOBAL_CONFIG.Sessionkey, store))
+	//init session
+	session.Init(config.GLOBAL_CONFIG.Sessionkey)
+	r.Use(func(c *gin.Context) {
+		sess, err := session.GetSessionManager().SessionStart(c.Writer, c.Request)
+		if err != nil {
+			log.Println(err)
+		}
+		defer sess.SessionRelease(c.Writer)
+		sessionutil.InitContextSession(c, sess)
+		c.Next()
+	})
 }

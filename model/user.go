@@ -3,6 +3,7 @@ package model
 import (
 	"database/sql"
 	"time"
+	"fmt"
 )
 
 import (
@@ -20,6 +21,10 @@ type User struct {
 	LastUpdateTime int64
 }
 
+func (this *User) String() string{
+	return fmt.Sprintf("id=[%d], username=[%s], password=[%s], nickname=[%s], status=[%d]", this.Id, this.Username, this.Password, this.Nickname, this.Status)
+}
+
 func NewUser() *User {
 	return new(User)
 }
@@ -32,7 +37,7 @@ func (this *User) Save() error {
 	return err
 }
 
-func (this *User) GetUserById() error {
+func (this *User) FillUserById() error {
 	r := repo.Run().QueryRow(`SELECT username, password, nickname, status, email, createtime, lastupdatetime FROM "user" where id = $1;`, this.Id)
 	e := r.Scan(&this.Username, &this.Password, &this.Nickname, &this.Status, &this.Email, &this.CreateTime, &this.LastUpdateTime)
 	if e != nil {
@@ -46,7 +51,7 @@ func (this *User) GetUserById() error {
 	}
 }
 
-func (this *User) GetUserByUsername() error {
+func (this *User) FillUserByUsername() error {
 	r := repo.Run().QueryRow(`SELECT id, password, nickname, status, email, createtime, lastupdatetime FROM "user" where username = $1;`, this.Username)
 	e := r.Scan(&this.Id, &this.Password, &this.Nickname, &this.Status, &this.Email, &this.CreateTime, &this.LastUpdateTime)
 	if e != nil {

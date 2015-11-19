@@ -32,6 +32,9 @@ func RegisterRoute(r *gin.Engine) {
 	r.GET("/", IndexAction)
 	r.GET("/post/:postId", ShowPostAction)
 
+	r.POST("/login", LoginAction)
+	r.GET("/logout", LogoutAction)
+
 	r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)
 
 	r.NoRoute(NoRouteHandler)
@@ -45,6 +48,8 @@ func registerTemplateCommonModel(m map[string]interface{}) {
 
 func registerTemplateFunc(m map[string]TemplateFunc) {
 	m["princess_requri"] = ShowReqUriFunction
+	m["is_login"] = IsLogin
+	m["user_nickname"] = GetUserNickName
 }
 
 func registerTemplateCommonFunc(m map[string]TemplateCommonFunc) {
