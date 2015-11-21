@@ -55,6 +55,7 @@ func registerTemplateFunc(m map[string]TemplateFunc) {
 
 func registerTemplateCommonFunc(m map[string]TemplateCommonFunc) {
 	m["StdDate"] = StdDate
+	m["user"] = GetUser
 }
 
 func registerTemplateFunc2(m map[string]TemplateFunc2) {

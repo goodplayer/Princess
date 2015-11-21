@@ -59,3 +59,20 @@ func GetUserNickName(c *gin.Context) string {
 	user := userT.(*model.User)
 	return user.Nickname
 }
+
+func GetUser(c interface{}) interface{} {
+	ctx, ok := c.(*gin.Context)
+	if !ok {
+		return nil
+	}
+	sess := princess_session.GetSession(ctx)
+	if sess == nil {
+		return nil
+	}
+	userT := sess.Get("user")
+	if userT == nil {
+		return nil
+	}
+	user := userT.(*model.User)
+	return user
+}
