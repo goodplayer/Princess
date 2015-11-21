@@ -16,7 +16,7 @@ func GetSessionManager() *session.Manager {
 
 func Init(cookieName string) {
 	var err error
-	globalSessions, err = session.NewManager("memory", `{"cookieName":"`+cookieName+`","gclifetime":3600,"gclifetime":`+strconv.Itoa(3600*24*30)+`}`)
+	globalSessions, err = session.NewManager("memory", `{"cookieName":"`+cookieName+`","gclifetime":3600,"maxLifetime":`+strconv.Itoa(3600*24*30)+`}`)
 	if err != nil {
 		panic(err)
 	}

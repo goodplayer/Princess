@@ -33,6 +33,7 @@ func RegisterRoute(r *gin.Engine) {
 	r.GET("/post/:postId", ShowPostAction)
 
 	r.POST("/login", LoginAction)
+	r.POST("/register", RegisterAction)
 	r.GET("/logout", LogoutAction)
 
 	r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)

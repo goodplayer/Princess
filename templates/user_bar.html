@@ -27,6 +27,15 @@
                     {{end}}
                 </li>
             </ul>
+            {{with $isLogin := is_login $context}}
+            {{if eq $isLogin "false"}}
+            <ul class="nav navbar-nav pull-right">
+                <li>
+                    <a href="#" data-toggle="modal" data-target="#registerModal">注册</a>
+                </li>
+            </ul>
+            {{end}}
+            {{end}}
         </div>
     </div>
 </nav>

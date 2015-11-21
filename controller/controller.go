@@ -36,6 +36,12 @@ func LoginAction(c *gin.Context) {
 
 	username := c.PostForm("j_username")
 	password := c.PostForm("j_password")
+	if len(username) == 0 || len(password) < 8 {
+		result["ErrorCode"] = "请填写完整信息"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
 	user := model.NewUser()
 	user.Username = username
 	err := user.FillUserByUsername()
@@ -46,7 +52,8 @@ func LoginAction(c *gin.Context) {
 	} else if err != nil {
 		log.Println(err)
 		result["ErrorCode"] = "系统错误"
-	} else if user.Password != password {
+	} else if !model.UserUtil().CheckPasswordMatch(user, password) {
+		// check password
 		result["ErrorCode"] = "用户名或密码错误"
 	} else {
 		success = true
@@ -64,6 +71,58 @@ func LoginAction(c *gin.Context) {
 		log.Println("user_id:", sess.Get(_session_user_id), "login")
 		c.Redirect(http.StatusFound, "/")
 	}
+}
+
+func RegisterAction(c *gin.Context) {
+	result := NewTemplateModel(c)
+
+	username := c.PostForm("j_username")
+	password := c.PostForm("j_password")
+	nickname := c.PostForm("j_nickname")
+	email := c.PostForm("j_email")
+
+	if len(username) == 0 || len(password) < 8 || len(nickname) == 0 || len(email) == 0 {
+		result["ErrorCode"] = "请填写完整信息"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+	//TODO 检查参数格式
+
+	exist, err := model.UserUtil().UserExists(username)
+	if err != nil {
+		result["ErrorCode"] = "系统错误，请重试"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		log.Println("[ERROR] check user exist:", err)
+		return
+	}
+	if exist {
+		result["ErrorCode"] = "用户名已经存在"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
+	user := model.NewUser()
+	user.Username = username
+	user.Password = password
+	user.Nickname = nickname
+	user.Email = email
+	err = model.UserUtil().PreparePassword(user)
+	if err != nil {
+		result["ErrorCode"] = "系统错误，请重试"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		log.Println("[ERROR] PreparePassword:", err)
+		return
+	}
+
+	err = user.Save()
+	if err != nil {
+		result["ErrorCode"] = "系统错误，请重试"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		log.Println("[ERROR] user save:", err)
+		return
+	}
+	result["Result"] = "用户注册成功，请登录"
+	c.HTML(http.StatusOK, "info.html", result)
 }
 
 func LogoutAction(c *gin.Context) {

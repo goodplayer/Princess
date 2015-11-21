@@ -8,8 +8,8 @@ import (
 	"github.com/astaxie/beego/session"
 	"github.com/gin-gonic/gin"
 
-	princess_session "moetang.info/prod/Princess/session"
 	"moetang.info/prod/Princess/model"
+	princess_session "moetang.info/prod/Princess/session"
 )
 
 const (
