@@ -38,7 +38,7 @@ func LoginAction(c *gin.Context) {
 
 	username := c.PostForm("j_username")
 	password := c.PostForm("j_password")
-	if len(username) == 0 || len(password) < 8 {
+	if len(username) == 0 || len(password) == 0 {
 		result["ErrorCode"] = "请填写完整信息"
 		c.HTML(http.StatusInternalServerError, "error.html", result)
 		return
