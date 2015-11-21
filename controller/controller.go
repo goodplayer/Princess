@@ -8,6 +8,8 @@ import (
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/microcosm-cc/bluemonday"
+	"github.com/russross/blackfriday"
 
 	"moetang.info/prod/Princess/model"
 	"moetang.info/prod/Princess/session"
@@ -105,6 +107,8 @@ func RegisterAction(c *gin.Context) {
 	user.Username = username
 	user.Password = password
 	user.Nickname = nickname
+	user.Status = 0
+	user.Authority = 0
 	user.Email = email
 	err = model.UserUtil().PreparePassword(user)
 	if err != nil {
@@ -153,4 +157,72 @@ func ShowPostAction(c *gin.Context) {
 	result := NewTemplateModel(c)
 	result["post"] = post
 	c.HTML(http.StatusOK, "post.html", result)
+}
+
+func ShowNewPostPageAction(c *gin.Context) {
+	if IsLogin(c) == "false" {
+		result := NewTemplateModel(c)
+		result["ErrorCode"] = "请先登录"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
+	user := GetUser(c).(*model.User)
+	if user.Authority <= 0 {
+		result := NewTemplateModel(c)
+		result["ErrorCode"] = "没有权限发表文章"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
+	c.HTML(http.StatusOK, "new_post.html", NewTemplateModel(c))
+}
+
+func NewPostAction(c *gin.Context) {
+	if IsLogin(c) == "false" {
+		result := NewTemplateModel(c)
+		result["ErrorCode"] = "请先登录"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
+	title := c.PostForm("title")
+	content := c.PostForm("content")
+	if len(title) == 0 || len(content) == 0 {
+		result := NewTemplateModel(c)
+		result["ErrorCode"] = "请填写所有内容"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
+	user := GetUser(c).(*model.User)
+	if user.Authority <= 0 {
+		result := NewTemplateModel(c)
+		result["ErrorCode"] = "没有权限发表文章"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
+	//	contentData := bluemonday.UGCPolicy().SanitizeBytes([]byte(content))
+	content = string(blackfriday.MarkdownCommon([]byte(content)))
+	title = string(bluemonday.UGCPolicy().SanitizeBytes([]byte(title)))
+
+	post := model.NewPost()
+	post.Title = title
+	post.Abstract = content
+	post.Content = content
+	post.PostUser = user
+	post.Status = 0
+	err := post.Save()
+	if err != nil {
+		log.Println("[ERROR] save post:", err)
+		result := NewTemplateModel(c)
+		result["ErrorCode"] = "系统错误"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
+
+	result := NewTemplateModel(c)
+	result["Result"] = "发表成功"
+	c.HTML(http.StatusOK, "info.html", result)
 }

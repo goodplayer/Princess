@@ -1,6 +1,7 @@
 package controller
 
 import (
+	"html/template"
 	"time"
 )
 
@@ -75,4 +76,12 @@ func GetUser(c interface{}) interface{} {
 	}
 	user := userT.(*model.User)
 	return user
+}
+
+func TemplateRawOutput(str interface{}) interface{} {
+	if nstr, ok := str.(string); ok {
+		return template.HTML(nstr)
+	} else {
+		return str
+	}
 }

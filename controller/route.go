@@ -36,6 +36,9 @@ func RegisterRoute(r *gin.Engine) {
 	r.POST("/register", RegisterAction)
 	r.GET("/logout", LogoutAction)
 
+	r.GET("/new_post", ShowNewPostPageAction)
+	r.POST("/posts", NewPostAction)
+
 	r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)
 
 	r.NoRoute(NoRouteHandler)
@@ -56,6 +59,7 @@ func registerTemplateFunc(m map[string]TemplateFunc) {
 func registerTemplateCommonFunc(m map[string]TemplateCommonFunc) {
 	m["StdDate"] = StdDate
 	m["user"] = GetUser
+	m["raw"] = TemplateRawOutput
 }
 
 func registerTemplateFunc2(m map[string]TemplateFunc2) {
