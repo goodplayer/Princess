@@ -18,6 +18,8 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="/statics/editor/js/epiceditor.min.js"></script>
+
     <style>
         body {
             padding-top: 0px;
@@ -40,12 +42,16 @@
         <hr>
         <form class="form-signin" id="form-post" method="post" action="/posts" autocomplete="off">
             <div>
-                <h3>标题：</h3>
-                <input type="text" class="form-control" id="inputTitle1" name="title">
+                <div class="pull-right" style="padding-bottom: 20px;">
+                    <button type="submit" class="btn btn-primary">发布</button>
+                </div>
+                <input type="text" class="form-control" id="inputTitle1" name="title" placeholder="标题">
                 <br/>
-                <textarea name="content" placeholder="support: Markdown"></textarea>
-                <br/>
-                <button type="submit" class="btn btn-primary">发布</button>
+                <div id="content-editor"></div>
+                <textarea id="content-edit-area" name="content" placeholder="support: Markdown" hidden="hidden"></textarea>
+                <div class="pull-right" style="padding-top: 20px;">
+                    <button type="submit" class="btn btn-primary">发布</button>
+                </div>
             </div>
         </form>
     </div>
@@ -57,6 +63,45 @@
 <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.3.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 <script src="/statics/js/bootstrap.min.js"></script>
+<script>
+    var opts = {
+        container: 'content-editor',
+        textarea: 'content-edit-area',
+        basePath: '/statics/editor',
+        clientSideStorage: true,
+        localStorageName: 'content-editor',
+        useNativeFullscreen: true,
+        parser: marked,
+        file: {
+            name: 'content-editor',
+            defaultContent: '',
+            autoSave: 100
+        },
+        theme: {
+            base: '/themes/base/epiceditor.css',
+            preview: '/themes/preview/preview-dark.css',
+            editor: '/themes/editor/epic-dark.css'
+        },
+        button: {
+            preview: true,
+            fullscreen: true,
+            bar: "auto"
+        },
+        focusOnLoad: false,
+        shortcut: {
+            modifier: 18,
+            fullscreen: 70,
+            preview: 80
+        },
+        string: {
+            togglePreview: 'Toggle Preview Mode',
+            toggleEdit: 'Toggle Edit Mode',
+            toggleFullscreen: 'Enter Fullscreen'
+        },
+        autogrow: true
+    };
+    var editor = new EpicEditor(opts).load();
+</script>
 
 </body>
 </html>

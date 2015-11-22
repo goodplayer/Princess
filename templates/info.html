@@ -18,6 +18,47 @@
     <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+    <script src="/statics/editor/js/epiceditor.min.js"></script>
+    <script>
+        var opts = {
+            container: 'content-editor',
+            textarea: 'content-edit-area',
+            basePath: '/statics/editor',
+            clientSideStorage: true,
+            localStorageName: 'content-editor',
+            useNativeFullscreen: true,
+            parser: marked,
+            file: {
+                name: 'content-editor',
+                defaultContent: '',
+                autoSave: 100
+            },
+            theme: {
+                base: '/themes/base/epiceditor.css',
+                preview: '/themes/preview/preview-dark.css',
+                editor: '/themes/editor/epic-dark.css'
+            },
+            button: {
+                preview: true,
+                fullscreen: true,
+                bar: "auto"
+            },
+            focusOnLoad: false,
+            shortcut: {
+                modifier: 18,
+                fullscreen: 70,
+                preview: 80
+            },
+            string: {
+                togglePreview: 'Toggle Preview Mode',
+                toggleEdit: 'Toggle Edit Mode',
+                toggleFullscreen: 'Enter Fullscreen'
+            },
+            autogrow: false
+        };
+        new EpicEditor(opts).remove('content-editor');
+    </script>
+
     <style>
         body {
             padding-top: 0px;
