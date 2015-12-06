@@ -88,6 +88,11 @@ func RegisterAction(c *gin.Context) {
 		c.HTML(http.StatusInternalServerError, "error.html", result)
 		return
 	}
+	if len(username) > 32 || len(password) > 32 || len(nickname) > 32 || len(email) > 90 {
+		result["ErrorCode"] = "信息填写过长"
+		c.HTML(http.StatusInternalServerError, "error.html", result)
+		return
+	}
 	//TODO 检查参数格式
 
 	exist, err := model.UserUtil().UserExists(username)
@@ -209,7 +214,11 @@ func NewPostAction(c *gin.Context) {
 
 	post := model.NewPost()
 	post.Title = title
-	post.Abstract = content
+	abstractLen := len(content)
+	if abstractLen > 6000 {
+		abstractLen = 6000
+	}
+	post.Abstract = content[:abstractLen]
 	post.Content = content
 	post.PostUser = user
 	post.Status = 0
