@@ -9,6 +9,9 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"moetang.info/prod/Princess/config"
+	"moetang.info/prod/Princess/controller/controllers"
+	"moetang.info/prod/Princess/controller/utils"
+	"moetang.info/prod/Princess/model"
 )
 
 type TemplateFunc func(*gin.Context) string
@@ -39,6 +42,9 @@ func RegisterRoute(r *gin.Engine) {
 	r.GET("/new_post", ShowNewPostPageAction)
 	r.POST("/posts", NewPostAction)
 
+	// admin
+	r.GET("/admin/users", controllers.ShowUsersAction)
+
 	r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)
 
 	r.NoRoute(NoRouteHandler)
@@ -54,12 +60,16 @@ func registerTemplateFunc(m map[string]TemplateFunc) {
 	m["princess_requri"] = ShowReqUriFunction
 	m["is_login"] = IsLogin
 	m["user_nickname"] = GetUserNickName
+	m["is_admin"] = IsAdmin
+	m["is_normal_user"] = IsNormalUser
 }
 
 func registerTemplateCommonFunc(m map[string]TemplateCommonFunc) {
 	m["StdDate"] = StdDate
 	m["user"] = GetUser
 	m["raw"] = TemplateRawOutput
+	m["StdUserStatus"] = model.UserStatusString
+	m["StdUserAuthority"] = model.UserAuthorityString
 }
 
 func registerTemplateFunc2(m map[string]TemplateFunc2) {
@@ -85,6 +95,7 @@ func registerDefaultFunctions(tmpl *template.Template) {
 	tmpl.Funcs(convertTemplateCommonFunc(mc))
 
 	registerTemplateCommonModel(g_TEMPLATE_COMMON_MODEL)
+	utils.Init(registerTemplateCommonModel)
 }
 
 func convertTemplateFunc(m map[string]TemplateFunc) template.FuncMap {

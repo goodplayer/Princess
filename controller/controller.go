@@ -11,14 +11,9 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday"
 
+	"moetang.info/prod/Princess/controller/controllers"
 	"moetang.info/prod/Princess/model"
 	"moetang.info/prod/Princess/session"
-)
-
-const (
-	_session_user_id = "___princess_user_id___"
-
-	session_key = "session"
 )
 
 func IndexAction(c *gin.Context) {
@@ -69,8 +64,8 @@ func LoginAction(c *gin.Context) {
 		sess := session.GetSession(c)
 		MarkLogin(sess)
 		sess.Set("user", user) // fill user info
-		sess.Set(_session_user_id, user.Id)
-		log.Println("user_id:", sess.Get(_session_user_id), "login")
+		sess.Set(controllers.Session_user_id, user.Id)
+		log.Println("user_id:", sess.Get(controllers.Session_user_id), "login")
 		c.Redirect(http.StatusFound, "/")
 	}
 }
@@ -137,7 +132,7 @@ func RegisterAction(c *gin.Context) {
 func LogoutAction(c *gin.Context) {
 	sess := session.GetSession(c)
 	MarkNotLogin(sess)
-	log.Println("user_id:", sess.Get(_session_user_id), "logout")
+	log.Println("user_id:", sess.Get(controllers.Session_user_id), "logout")
 	sess.Flush()
 	c.Redirect(http.StatusFound, "/")
 }

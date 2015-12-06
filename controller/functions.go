@@ -85,3 +85,35 @@ func TemplateRawOutput(str interface{}) interface{} {
 		return str
 	}
 }
+
+func IsAdmin(c *gin.Context) string {
+	sess := princess_session.GetSession(c)
+	if sess == nil {
+		return "[未登录]"
+	}
+	userT := sess.Get("user")
+	if userT == nil {
+		return "[未登录]"
+	}
+	user := userT.(*model.User)
+	if user.Authority == model.USER_AUTHORITY_ADMIN {
+		return "true"
+	}
+	return "false"
+}
+
+func IsNormalUser(c *gin.Context) string {
+	sess := princess_session.GetSession(c)
+	if sess == nil {
+		return "[未登录]"
+	}
+	userT := sess.Get("user")
+	if userT == nil {
+		return "[未登录]"
+	}
+	user := userT.(*model.User)
+	if user.Authority == model.USER_AUTHORITY_NORMAL {
+		return "true"
+	}
+	return "false"
+}

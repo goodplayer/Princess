@@ -88,6 +88,12 @@
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                         <li><a href="/new_post">发表文章</a></li>
                         <hr/>
+                        {{with $isAdmin := is_admin $context}}
+                        {{if eq $isAdmin "true"}}
+                        <li><a href="/admin/users">用户管理</a></li>
+                        <hr/>
+                        {{end}}
+                        {{end}}
                         <li><a href="/logout">登出</a></li>
                     </ul>
                 </li>

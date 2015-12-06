@@ -1,11 +1,13 @@
 package model
 
 import (
+	"container/list"
 	"crypto/rand"
 	"crypto/sha256"
 	"database/sql"
 	"encoding/base64"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -68,6 +70,47 @@ func (userUtil) UserExists(username string) (bool, error) {
 	} else {
 		return true, nil
 	}
+}
+
+func (userUtil) GetAllUsers() ([]*User, error) {
+	rows, err := repo.Run().Query(`SELECT id, username, password, nickname, status, email, createtime, lastupdatetime, salt, authority FROM "user";`)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		e := rows.Close()
+		if e != nil {
+			log.Println(e)
+		}
+	}()
+	l := list.New()
+	for rows.Next() {
+		user, err := wrapUser(rows)
+		if err != nil {
+			return nil, err
+		}
+		l.PushBack(user)
+	}
+	if l.Len() > 0 {
+		result := make([]*User, l.Len())
+		idx := 0
+		for e := l.Front(); e != nil; e = e.Next() {
+			result[idx] = e.Value.(*User)
+			idx++
+		}
+		return result, nil
+	} else {
+		return []*User{}, nil
+	}
+}
+
+func wrapUser(r *sql.Rows) (*User, error) {
+	user := new(User)
+	e := r.Scan(&user.Id, &user.Username, &user.Password, &user.Nickname, &user.Status, &user.Email, &user.CreateTime, &user.LastUpdateTime, &user.Salt, &user.Authority)
+	if e != nil {
+		return nil, e
+	}
+	return user, nil
 }
 
 type User struct {
