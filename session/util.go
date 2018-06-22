@@ -7,6 +7,6 @@ import (
 	"github.com/goodplayer/Princess/session/sessionutil"
 )
 
-func GetSession(c *gin.Context) session.SessionStore {
-	return c.MustGet(sessionutil.GetContextSessionKey()).(session.SessionStore)
+func GetSession(c *gin.Context) session.Store {
+	return c.MustGet(sessionutil.GetContextSessionKey()).(session.Store)
 }

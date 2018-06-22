@@ -11,6 +11,6 @@ func GetContextSessionKey() string {
 	return contextSessionKey
 }
 
-func InitContextSession(c *gin.Context, s session.SessionStore) {
+func InitContextSession(c *gin.Context, s session.Store) {
 	c.Set(contextSessionKey, s)
 }
