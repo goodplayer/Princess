@@ -14,11 +14,17 @@ import (
 	"github.com/goodplayer/Princess/controller/controllers"
 	"github.com/goodplayer/Princess/model"
 	"github.com/goodplayer/Princess/session"
+	"github.com/goodplayer/Princess/utils/logging"
+)
+
+var (
+	LOGGER = logging.NewLogger("controller")
 )
 
 func IndexAction(c *gin.Context) {
 	posts, err := model.PostUtil().GetIndexPosts()
 	if err != nil {
+		LOGGER.Error(err)
 		c.HTML(http.StatusInternalServerError, "500.html", NewTemplateModel(c))
 	} else {
 		result := NewTemplateModel(c)
