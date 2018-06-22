@@ -8,10 +8,10 @@ import (
 import (
 	"github.com/gin-gonic/gin"
 
-	"moetang.info/prod/Princess/config"
-	"moetang.info/prod/Princess/controller/controllers"
-	"moetang.info/prod/Princess/controller/utils"
-	"moetang.info/prod/Princess/model"
+	"github.com/goodplayer/Princess/config"
+	"github.com/goodplayer/Princess/controller/controllers"
+	"github.com/goodplayer/Princess/controller/utils"
+	"github.com/goodplayer/Princess/model"
 )
 
 type TemplateFunc func(*gin.Context) string

@@ -8,7 +8,7 @@ import (
 )
 
 import (
-	"moetang.info/prod/Princess/repo"
+	"github.com/goodplayer/Princess/repo"
 )
 
 var (

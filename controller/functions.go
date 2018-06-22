@@ -9,7 +9,7 @@ import (
 	"github.com/astaxie/beego/session"
 	"github.com/gin-gonic/gin"
 
-	"moetang.info/prod/Princess/model"
+	"github.com/goodplayer/Princess/model"
 	princess_session "moetang.info/prod/Princess/session"
 )
 

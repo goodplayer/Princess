@@ -8,7 +8,7 @@ import (
 import (
 	_ "github.com/lib/pq"
 
-	"moetang.info/prod/Princess/config"
+	"github.com/goodplayer/Princess/config"
 )
 
 var (

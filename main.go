@@ -13,11 +13,11 @@ import (
 import (
 	"github.com/gin-gonic/gin"
 
-	"moetang.info/prod/Princess/config"
-	"moetang.info/prod/Princess/controller"
-	"moetang.info/prod/Princess/repo"
-	"moetang.info/prod/Princess/session"
-	"moetang.info/prod/Princess/session/sessionutil"
+	"github.com/goodplayer/Princess/config"
+	"github.com/goodplayer/Princess/controller"
+	"github.com/goodplayer/Princess/repo"
+	"github.com/goodplayer/Princess/session"
+	"github.com/goodplayer/Princess/session/sessionutil"
 )
 
 func init() {

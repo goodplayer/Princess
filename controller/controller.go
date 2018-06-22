@@ -11,9 +11,9 @@ import (
 	"github.com/microcosm-cc/bluemonday"
 	"github.com/russross/blackfriday"
 
-	"moetang.info/prod/Princess/controller/controllers"
-	"moetang.info/prod/Princess/model"
-	"moetang.info/prod/Princess/session"
+	"github.com/goodplayer/Princess/controller/controllers"
+	"github.com/goodplayer/Princess/model"
+	"github.com/goodplayer/Princess/session"
 )
 
 func IndexAction(c *gin.Context) {

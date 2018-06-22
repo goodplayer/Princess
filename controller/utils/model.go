@@ -3,8 +3,8 @@ package utils
 import (
 	"github.com/gin-gonic/gin"
 
-	"moetang.info/prod/Princess/model"
-	"moetang.info/prod/Princess/session"
+	"github.com/goodplayer/Princess/model"
+	"github.com/goodplayer/Princess/session"
 )
 
 func IsAdmin(c *gin.Context) bool {

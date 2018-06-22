@@ -6,8 +6,8 @@ import (
 )
 
 import (
-	"moetang.info/prod/Princess/config"
-	"moetang.info/prod/Princess/repo"
+	"github.com/goodplayer/Princess/config"
+	"github.com/goodplayer/Princess/repo"
 )
 
 func initDb() {
