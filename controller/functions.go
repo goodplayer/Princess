@@ -10,7 +10,7 @@ import (
 	"github.com/gin-gonic/gin"
 
 	"github.com/goodplayer/Princess/model"
-	princess_session "moetang.info/prod/Princess/session"
+	princess_session "github.com/goodplayer/Princess/session"
 )
 
 const (
