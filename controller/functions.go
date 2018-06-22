@@ -40,11 +40,11 @@ func IsLogin(c *gin.Context) string {
 	}
 }
 
-func MarkLogin(sess session.SessionStore) {
+func MarkLogin(sess session.Store) {
 	sess.Set(_session_login_flag, _session_login_flag)
 }
 
-func MarkNotLogin(sess session.SessionStore) {
+func MarkNotLogin(sess session.Store) {
 	sess.Delete(_session_login_flag)
 }
 
