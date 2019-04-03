@@ -8,16 +8,14 @@ import (
 	"net/http/fcgi"
 	"os"
 	"path"
-)
-
-import (
-	"github.com/gin-gonic/gin"
 
 	"github.com/goodplayer/Princess/config"
-	"github.com/goodplayer/Princess/controller"
+	"github.com/goodplayer/Princess/controller2"
 	"github.com/goodplayer/Princess/repo"
-	"github.com/goodplayer/Princess/session"
-	"github.com/goodplayer/Princess/session/sessionutil"
+
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/memstore"
+	"github.com/gin-gonic/gin"
 )
 
 func init() {
@@ -71,21 +69,14 @@ func startFastCgi(r *gin.Engine) {
 
 func initProcess(r *gin.Engine) {
 	initMiddleware(r)
-	controller.RegisterRoute(r)
+	//controller.RegisterRoute(r)
+	controller2.Init(r)
 	repo.InitRepo(config.GLOBAL_CONFIG)
 }
 
 func initMiddleware(r *gin.Engine) {
 	r.Use(gin.Recovery(), gin.Logger())
 	//init session
-	session.Init(config.GLOBAL_CONFIG.Sessionkey)
-	r.Use(func(c *gin.Context) {
-		sess, err := session.GetSessionManager().SessionStart(c.Writer, c.Request)
-		if err != nil {
-			log.Println(err)
-		}
-		defer sess.SessionRelease(c.Writer)
-		sessionutil.InitContextSession(c, sess)
-		c.Next()
-	})
+	store := memstore.NewStore([]byte(config.GLOBAL_CONFIG.Sessionkey))
+	r.Use(sessions.Sessions(config.GLOBAL_CONFIG.Sessionkey, store))
 }

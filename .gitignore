@@ -29,3 +29,7 @@ _testmain.go
 # idea/webstorm
 /.idea
 
+# build files
+/princess.tgz
+/princess_build
+/princess
