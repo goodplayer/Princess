@@ -28,3 +28,9 @@ bind=":8081"
 
 [site]
 default_site_name="Moetang Tech Blog"
+
+[db_obj]
+# postgresql database connection string
+db_conn_str="postgres://localhost/blog?sslmode=disable"
+db_min_count=3
+db_max_count=3

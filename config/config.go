@@ -36,6 +36,12 @@ type Config struct {
 	SiteConfig struct {
 		DefaultSiteName string `toml:"default_site_name"`
 	} `toml:"site"`
+
+	DbObjConfig struct {
+		DbConnStr  string `toml:"db_conn_str"`
+		DbMinCount int    `toml:"db_min_count"`
+		DbMaxCount int    `toml:"db_max_count"`
+	} `toml:"db_obj"`
 }
 
 func Load(path string) *Config {
