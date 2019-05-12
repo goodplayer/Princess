@@ -69,7 +69,6 @@ func startFastCgi(r *gin.Engine) {
 
 func initProcess(r *gin.Engine) {
 	initMiddleware(r)
-	//controller.RegisterRoute(r)
 	controller2.Init(r)
 	repo.InitRepo(config.GLOBAL_CONFIG)
 }

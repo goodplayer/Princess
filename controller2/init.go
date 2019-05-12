@@ -1,6 +1,13 @@
 package controller2
 
-import "github.com/gin-gonic/gin"
+import (
+	"html/template"
+	"net/http"
+
+	"github.com/goodplayer/Princess/config"
+
+	"github.com/gin-gonic/gin"
+)
 
 func Init(r *gin.Engine) {
 	// home page for redirecting
@@ -16,7 +23,23 @@ func Init(r *gin.Engine) {
 	//
 	//// admin
 	//r.GET("/admin/users", controllers.ShowUsersAction)
-	//
-	//r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)
+
+	InitRecording(r)
+
+	templ := template.New("")
+	registerFunction(templ)
+	templ = template.Must(templ.ParseGlob(config.GLOBAL_CONFIG.TemplatePath))
+	r.SetHTMLTemplate(templ)
+
+	r.Static("/statics", config.GLOBAL_CONFIG.StaticPath)
+
+	r.NoRoute(NoRouteHandler)
+}
+
+func NoRouteHandler(c *gin.Context) {
+	c.HTML(http.StatusNotFound, "404.html", struct{}{})
+}
+
+func registerFunction(t *template.Template) {
 
 }

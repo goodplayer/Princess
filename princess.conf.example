@@ -11,14 +11,14 @@ session_encrypt_key="princess.key"
 session_key="princess"
 
 # template path
-template_path="./templates"
+template_path="./templates/*"
 
 # static path
 static_path="./statics"
 
 [db]
 # postgresql database connection string
-db_conn_str="postgres://localhost/blog?sslmode=disable"
+db_conn_str="user=dev password=pw1 dbname=blog sslmode=disable host=localhost port=5432 connect_timeout=20"
 db_min_count=5
 db_max_count=10
 
@@ -31,6 +31,6 @@ default_site_name="Moetang Tech Blog"
 
 [db_obj]
 # postgresql database connection string
-db_conn_str="postgres://localhost/blog?sslmode=disable"
+db_conn_str="user=dev password=pw1 dbname=blog sslmode=disable host=localhost port=5432 connect_timeout=20"
 db_min_count=3
 db_max_count=3
