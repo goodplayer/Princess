@@ -13,6 +13,8 @@ import (
 func InitRecording(r *gin.Engine) {
 	r.GET("/recording", RecordingIndex)
 	r.GET("/recording/", RecordingIndex)
+
+	r.POST("/recording/new", RecordingNew)
 }
 
 var (
@@ -46,6 +48,32 @@ type RecordingType struct {
 	Config     *string
 	CreateTime int64
 	ModifyTime int64
+}
+
+func RecordingNew(c *gin.Context) {
+	form, err := c.MultipartForm()
+	if err != nil {
+		c.HTML(http.StatusOK, "500.html", struct {
+			Message string
+		}{
+			Message: "报错了...",
+		})
+		recordingLogger.Error("parse new recording multipart form error:", err)
+		return
+	}
+
+	titles, ok := form.Value["title"]
+	contents, ok := form.Value["content"]
+	recordingUrls, ok := form.Value["recording_url"]
+	recordingTypes, ok := form.Value["recording_type"]
+
+	fileHeaders, ok := form.File["attachment"]
+	fileHeaders[0].Filename
+	f, err := fileHeaders[0].Open()
+
+	form.RemoveAll()
+
+	//TODO
 }
 
 func RecordingIndex(c *gin.Context) {

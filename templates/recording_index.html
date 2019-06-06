@@ -28,7 +28,7 @@
         {{if ne (len .Recordings) 0}}
             {{range .Recordings}}
                 <tr class="row">
-                    <th scope="row" class="col-7">{{.Title}}</th>
+                    <th scope="row" class="col-7"><a href="/recording/show?article={{.ArticleId}}">{{.Title}}</a></th>
                     <td class="col-3">{{.ModifyTimeString}}</td>
                     <td class="col-2">&nbsp;</td>
                 </tr>
@@ -44,6 +44,45 @@
     <div class="col-1">
         &nbsp;
     </div>
+</div>
+
+<div>
+    <form action="/recording/new" method="post" enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-1">&nbsp;</div>
+            <div class="col-10">
+                <div class="form-group">
+                    <label for="new_title">标题</label>
+                    <input type="text" class="form-control" id="new_title" name="title" placeholder="标题">
+                </div>
+                <div class="form-group">
+                    <label for="new_content">内容</label>
+                    <textarea class="form-control" id="new_content" name="content" rows="10"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="new_recording_url">记录地址</label>
+                    <input type="text" class="form-control" id="new_recording_url" name="recording_url"
+                           placeholder="url">
+                </div>
+                <div class="form-group">
+                    <label for="new_recording_type">记录地址类型</label>
+                    <select class="form-control" id="new_recording_type" name="recording_type">
+                        <option name="default">默认</option>
+                        {{if ne (len .Types) 0}}
+                            {{range .Types}}
+                                <option name="{{.Id}}">{{.Title}}</option>
+                            {{end}}
+                        {{end}}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="new_attachment">附件图片</label>
+                    <input type="file" class="form-control-file" id="new_attachment" name="attachment">
+                </div>
+                <button type="submit" class="btn btn-primary">提交</button>
+            </div>
+        </div>
+    </form>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
