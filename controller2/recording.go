@@ -67,9 +67,16 @@ func RecordingNew(c *gin.Context) {
 	recordingUrls, ok := form.Value["recording_url"]
 	recordingTypes, ok := form.Value["recording_type"]
 
-	fileHeaders, ok := form.File["attachment"]
-	fileHeaders[0].Filename
-	f, err := fileHeaders[0].Open()
+	//TODO
+	var _ = titles
+	var _ = contents
+	var _ = recordingUrls
+	var _ = recordingTypes
+	var _ = ok
+
+	//fileHeaders, ok := form.File["attachment"]
+	//fileHeaders[0].Filename
+	//f, err := fileHeaders[0].Open()
 
 	form.RemoveAll()
 
