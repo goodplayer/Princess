@@ -25,6 +25,7 @@ func Init(r *gin.Engine) {
 	//r.GET("/admin/users", controllers.ShowUsersAction)
 
 	InitRecording(r)
+	InitReg(r)
 
 	templ := template.New("")
 	registerFunction(templ)
@@ -37,7 +38,11 @@ func Init(r *gin.Engine) {
 }
 
 func NoRouteHandler(c *gin.Context) {
-	c.HTML(http.StatusNotFound, "404.html", struct{}{})
+	ctx := map[string]interface{}{
+		"site_name": config.GLOBAL_CONFIG.SiteConfig.DefaultSiteName,
+	}
+
+	c.HTML(http.StatusNotFound, "404.html", ctx)
 }
 
 func registerFunction(t *template.Template) {
