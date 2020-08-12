@@ -24,7 +24,9 @@ func Init(r *gin.Engine) {
 	//// admin
 	//r.GET("/admin/users", controllers.ShowUsersAction)
 
+	//TODO remove
 	InitRecording(r)
+
 	InitReg(r)
 
 	templ := template.New("")
