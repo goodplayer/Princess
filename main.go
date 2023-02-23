@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"gorm.io/driver/sqlserver"
+	"gorm.io/gorm"
 	"log"
 	"net"
 	"net/http"
@@ -28,6 +30,12 @@ func init() {
 func main() {
 	r := gin.New()
 	initProcess(r)
+
+	dsn := "sqlserver://sa:P@ssw0rdP@ssw0rd@192.168.31.207:1433?database=princess"
+	db, err := gorm.Open(sqlserver.Open(dsn), &gorm.Config{})
+	if err != nil {
+		panic(err)
+	}
 
 	// start fastcgi
 	go func() {
