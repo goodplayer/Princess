@@ -5,9 +5,7 @@ import (
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
 	"log"
-	"net"
 	"net/http"
-	"net/http/fcgi"
 	"os"
 	"path"
 
@@ -37,42 +35,21 @@ func main() {
 		panic(err)
 	}
 
-	// start fastcgi
-	go func() {
-		if config.GLOBAL_CONFIG.HttpConfig.Enable {
-			var err error = nil
-			if gin.IsDebugging() {
-				log.Printf("[GIN-debug] Listening and serving HTTP on %s\n", config.GLOBAL_CONFIG.HttpConfig.Bind)
-			}
-			defer func() {
-				if err != nil && gin.IsDebugging() {
-					log.Printf("[GIN-debug] [ERROR] %v\n", err)
-				}
-			}()
-
-			server := &http.Server{
-				Addr:    config.GLOBAL_CONFIG.HttpConfig.Bind,
-				Handler: r,
-			}
-
-			err = server.ListenAndServe()
+	if gin.IsDebugging() {
+		log.Printf("[GIN-debug] Listening and serving HTTP on %s\n", config.GLOBAL_CONFIG.HttpConfig.Bind)
+	}
+	defer func() {
+		if err != nil && gin.IsDebugging() {
+			log.Printf("[GIN-debug] [ERROR] %v\n", err)
 		}
 	}()
-
-	startFastCgi(r)
-}
-
-func startFastCgi(r *gin.Engine) {
-	addr, err := net.ResolveTCPAddr("tcp", config.GLOBAL_CONFIG.Bind)
-	if err != nil {
+	server := &http.Server{
+		Addr:    config.GLOBAL_CONFIG.HttpConfig.Bind,
+		Handler: r,
+	}
+	if err = server.ListenAndServe(); err != nil {
 		panic(err)
 	}
-	listener, err := net.ListenTCP("tcp", addr)
-	if err != nil {
-		panic(err)
-	}
-	log.Println("[Fastcgi] starting fastcgi on", config.GLOBAL_CONFIG.Bind)
-	fcgi.Serve(listener, r)
 }
 
 func initProcess(r *gin.Engine) {
