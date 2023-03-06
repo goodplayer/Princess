@@ -9,6 +9,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/render"
@@ -24,6 +25,8 @@ type compositeHtmlRender struct {
 	engine          *gin.Engine
 	defaultTemplate *template.Template
 	delims          render.Delims
+
+	printDebugInfo bool
 }
 
 type renderEntry struct {
@@ -93,7 +96,9 @@ func (c *compositeHtmlRender) addPath(v string) {
 	for _, lv := range fullpathSplits {
 		entry, ok := store[lv]
 		processPath = filepath.Join(processPath, lv)
-		_, _ = fmt.Fprintln(gin.DefaultWriter, "Load template path:", filepath.Join(processPath, "*."+c.ext))
+		if c.printDebugInfo {
+			_, _ = fmt.Fprintln(gin.DefaultWriter, "Load template path:", filepath.Join(processPath, "*."+c.ext))
+		}
 		if !ok {
 			entry = &renderEntry{store: map[string]*renderEntry{}}
 			store[lv] = entry
@@ -114,9 +119,11 @@ func (c *compositeHtmlRender) addPath(v string) {
 					panic(err)
 				}
 				entry.templ = templ.Funcs(c.engine.FuncMap)
-				_, _ = fmt.Fprintln(gin.DefaultWriter, "Loaded files:")
-				for _, t := range templ.Templates() {
-					_, _ = fmt.Fprintln(gin.DefaultWriter, " - ", t.Name())
+				if c.printDebugInfo {
+					_, _ = fmt.Fprintln(gin.DefaultWriter, "Loaded files:")
+					for _, t := range templ.Templates() {
+						_, _ = fmt.Fprintln(gin.DefaultWriter, " - ", t.Name())
+					}
 				}
 			}
 		}
@@ -125,6 +132,10 @@ func (c *compositeHtmlRender) addPath(v string) {
 }
 
 func LoadHTMLTemplateFolder(engine *gin.Engine, folder string, ext string, delims render.Delims) render.HTMLRender {
+	return loadHTMLTemplateFolder0(engine, folder, ext, delims, true)
+}
+
+func loadHTMLTemplateFolder0(engine *gin.Engine, folder string, ext string, delims render.Delims, printDebugInfo bool) render.HTMLRender {
 	if len(folder) <= 0 {
 		panic(errors.New("should specify a folder"))
 	}
@@ -156,6 +167,7 @@ func LoadHTMLTemplateFolder(engine *gin.Engine, folder string, ext string, delim
 	r.engine = engine
 	r.defaultTemplate = template.New("")
 	r.delims = delims
+	r.printDebugInfo = printDebugInfo
 	for _, v := range scanFolders {
 		r.addPath(v)
 	}
@@ -163,10 +175,31 @@ func LoadHTMLTemplateFolder(engine *gin.Engine, folder string, ext string, delim
 	return r
 }
 
-func InitGinHtmlTemplate(engine *gin.Engine, r render.HTMLRender) {
+func InitHtmlTemplate(engine *gin.Engine, r render.HTMLRender) {
 	engine.HTMLRender = r
 }
 
-func InitGinHtmlTemplateFromFolder(engine *gin.Engine, folder string, ext string) {
+func InitHtmlTemplateFromFolder(engine *gin.Engine, folder string, ext string) {
 	engine.HTMLRender = LoadHTMLTemplateFolder(engine, folder, ext, DefaultDelims)
+}
+
+func InitHtmlTemplateFromFolderWithDebugReloading(engine *gin.Engine, folder string, ext string) {
+	engine.HTMLRender = LoadHTMLTemplateFolder(engine, folder, ext, DefaultDelims)
+
+	go func() {
+		ticker := time.NewTicker(time.Second)
+		for {
+			func() {
+				<-ticker.C
+				defer func() {
+					if e := recover(); e != nil {
+						_, _ = fmt.Fprintln(gin.DefaultWriter, "Reload template failed:", e)
+					}
+				}()
+				newRender := loadHTMLTemplateFolder0(engine, folder, ext, DefaultDelims, false)
+				<-ticker.C
+				engine.HTMLRender = newRender
+			}()
+		}
+	}()
 }
