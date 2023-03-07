@@ -9,11 +9,11 @@ import (
 )
 
 const (
-	_DefaultMethodNameForDependencyInjection = "RequestFor"
+	_DefaultMethodNameForDependencyInjection = "DependOn"
 )
 
 // ApplicationContainer support simple object container
-// If object provide 'RequestFor' method with several parameters as dependencies,
+// If object provide 'DependOn' method with several parameters as dependencies,
 // then DI will be effective and dependencies will be provided for this method.
 type ApplicationContainer struct {
 	sync                          sync.RWMutex
@@ -52,7 +52,7 @@ func (a *ApplicationContainer) Get(t reflect.Type) interface{} {
 
 // Set will register an object to the container
 // In order to use dependency injection, the correct type(struct or *struct) of object should be used,
-// for both 'RequestFor' receiver and provided objects.
+// for both 'DependOn' receiver and provided objects.
 func (a *ApplicationContainer) Set(obj interface{}) {
 	// should block operations on uninitialized container
 	a.ensureUninitialized()

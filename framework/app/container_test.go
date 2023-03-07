@@ -19,7 +19,7 @@ type DemoService struct {
 	dep *Dependency1
 }
 
-func (d *DemoService) RequestFor(dep *Dependency1) {
+func (d *DemoService) DependOn(dep *Dependency1) {
 	d.dep = dep
 }
 
