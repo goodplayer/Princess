@@ -23,3 +23,13 @@ type templateRender struct {
 func (t *templateRender) renderContext(ctx *gin.Context) {
 	ctx.HTML(t.status, t.template, t.data)
 }
+
+func NewErrorTemplate(status int, template string, err error) Render {
+	return &templateRender{
+		status:   status,
+		template: template,
+		data: map[string]any{
+			"error": err.Error(),
+		},
+	}
+}
