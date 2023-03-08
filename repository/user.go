@@ -49,3 +49,16 @@ func (d *Db) CheckUserExistsByEmail(email string) (bool, error) {
 	}
 	return tx.RowsAffected > 0, nil
 }
+
+func (d *Db) LoadUserByUsername(username string) (*User, error) {
+	user := new(User)
+	tx := d.db.Where("user_name = ?", username).Find(user)
+	if tx.Error != nil {
+		return nil, tx.Error
+	}
+	if tx.RowsAffected > 0 {
+		return user, nil
+	} else {
+		return nil, nil
+	}
+}

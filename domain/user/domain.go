@@ -42,6 +42,16 @@ func (u *User) ToDbModel() *repository.User {
 	return dbUser
 }
 
+func (u *User) FromDbModel(dbUser *repository.User) *User {
+	u.Username = dbUser.UserName
+	u.password = dbUser.Password
+	u.user = dbUser
+	u.AliasName = dbUser.AliasName
+	u.UserId = dbUser.UserId
+	u.Status = dbUser.UserStatus
+	return u
+}
+
 func (u *User) VerifyPassword(password string) bool {
 	err := bcrypt.CompareHashAndPassword([]byte(u.password), []byte(password))
 	if err != nil {

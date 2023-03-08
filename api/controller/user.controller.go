@@ -24,6 +24,7 @@ func initUser(r *gin.Engine, ac *app.ApplicationContainer) error {
 		ginsupport.GroupPOST(userGroup, "/register", uc.doUserRegister)
 
 		ginsupport.GroupGET(userGroup, "/login", uc.showLogin)
+		ginsupport.GroupPOST(userGroup, "/login", uc.doLogin)
 	}
 
 	return nil
@@ -76,6 +77,28 @@ func (uc *UserController) doUserRegister(ctx *gin.Context) ginsupport.Render {
 
 func (uc *UserController) showLogin(ctx *gin.Context) ginsupport.Render {
 	return ginsupport.NewRenderTemplateSuccess("default/user/login.html", gin.H{})
+}
+
+func (uc *UserController) doLogin(ctx *gin.Context) ginsupport.Render {
+	params := new(struct {
+		UserName string `form:"username" binding:"required,max=120"`
+		Password string `form:"password" binding:"required,min=8,max=20"`
+	})
+
+	if err := ctx.ShouldBind(params); err != nil {
+		return ginsupport.NewErrorTemplate(http.StatusBadRequest, "default/user/login.html", err)
+	}
+
+	if u, err := uc.userDomainService.UserAuthByPassword(params.UserName, params.Password); err != nil {
+		return ginsupport.NewErrorTemplate(http.StatusBadRequest, "default/user/login.html", errors.New("login failed"))
+	} else {
+		//TODO init session with user
+		var _ = u
+	}
+
+	return ginsupport.NewRenderTemplateSuccess("default/user/login_success.html", gin.H{
+		"redirect_url": "/",
+	})
 }
 
 func (uc *UserController) userLogout() {

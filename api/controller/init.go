@@ -7,6 +7,9 @@ import (
 )
 
 func InitController(r *gin.Engine, ac *app.ApplicationContainer) error {
+	if err := initHomepage(r, ac); err != nil {
+		return err
+	}
 	if err := initUser(r, ac); err != nil {
 		return err
 	}
