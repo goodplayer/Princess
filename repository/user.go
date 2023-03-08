@@ -41,3 +41,11 @@ func (d *Db) DeleteUser(user *User) error {
 	}
 	return nil
 }
+
+func (d *Db) CheckUserExistsByEmail(email string) (bool, error) {
+	tx := d.db.Where("user_name = ?", email).Find(&User{})
+	if tx.Error != nil {
+		return false, tx.Error
+	}
+	return tx.RowsAffected > 0, nil
+}

@@ -29,7 +29,8 @@ func NewErrorTemplate(status int, template string, err error) Render {
 		status:   status,
 		template: template,
 		data: map[string]any{
-			"error": err.Error(),
+			"error":    err.Error(),
+			"is_error": true,
 		},
 	}
 }

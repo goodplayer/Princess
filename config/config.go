@@ -1,17 +1,25 @@
 package config
 
 import (
-	"io/ioutil"
+	"io"
 	"os"
 )
 
 import (
-	"github.com/naoina/toml"
+	"github.com/pelletier/go-toml/v2"
 )
 
 var (
-	GLOBAL_CONFIG *Config
+	_GLOBAL_CONFIG *Config
 )
+
+func GlobalConfig() *Config {
+	return _GLOBAL_CONFIG
+}
+
+func InitConfig(config *Config) {
+	_GLOBAL_CONFIG = config
+}
 
 type Config struct {
 	Bind              string `toml:"bind"`
@@ -51,7 +59,7 @@ func Load(path string) *Config {
 	}
 	defer f.Close()
 
-	buf, err := ioutil.ReadAll(f)
+	buf, err := io.ReadAll(f)
 	if err != nil {
 		panic(err)
 	}
