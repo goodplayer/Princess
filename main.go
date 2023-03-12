@@ -11,11 +11,10 @@ import (
 	"github.com/goodplayer/Princess/config"
 	"github.com/goodplayer/Princess/domain"
 	"github.com/goodplayer/Princess/framework/app"
+	"github.com/goodplayer/Princess/framework/ginplugin"
 	"github.com/goodplayer/Princess/framework/ginsupport"
 	"github.com/goodplayer/Princess/repository"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/memstore"
 	"github.com/gin-gonic/gin"
 	"gorm.io/driver/sqlserver"
 	"gorm.io/gorm"
@@ -86,7 +85,9 @@ func initProcess(r *gin.Engine, ac *app.ApplicationContainer) error {
 
 func initMiddleware(r *gin.Engine) {
 	r.Use(gin.Recovery(), gin.Logger())
+
 	//init session
-	store := memstore.NewStore([]byte(config.GlobalConfig().Sessionkey))
-	r.Use(sessions.Sessions(config.GlobalConfig().Sessionkey, store))
+	store := ginplugin.NewMemSessionStore()
+	s := ginplugin.NewSessionDomainService("Princess", 3600*24*30, store)
+	r.Use(ginplugin.SessionHandler(s))
 }

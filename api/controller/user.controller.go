@@ -6,6 +6,7 @@ import (
 
 	"github.com/goodplayer/Princess/domain/user"
 	"github.com/goodplayer/Princess/framework/app"
+	"github.com/goodplayer/Princess/framework/ginplugin"
 	"github.com/goodplayer/Princess/framework/ginsupport"
 
 	"github.com/gin-gonic/gin"
@@ -92,8 +93,13 @@ func (uc *UserController) doLogin(ctx *gin.Context) ginsupport.Render {
 	if u, err := uc.userDomainService.UserAuthByPassword(params.UserName, params.Password); err != nil {
 		return ginsupport.NewErrorTemplate(http.StatusBadRequest, "default/user/login.html", errors.New("login failed"))
 	} else {
-		//TODO init session with user
-		var _ = u
+		// init session with user
+		session := ginplugin.Session(ctx)
+		session.Set("user_id", []byte(u.UserId))
+		if err := session.SaveAndFreeze(); err != nil {
+			userControllerLogger.Errorf("save login user session failed: %s", err)
+			return ginsupport.NewErrorTemplate(http.StatusBadRequest, "default/user/login.html", errors.New("login failed"))
+		}
 	}
 
 	return ginsupport.NewRenderTemplateSuccess("default/user/login_success.html", gin.H{

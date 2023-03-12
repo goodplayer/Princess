@@ -22,10 +22,9 @@ func InitConfig(config *Config) {
 }
 
 type Config struct {
-	Bind              string `toml:"bind"`
-	HostProtocol      string `toml:"protocol"`
-	SessionEncryptKey string `toml:"session_encrypt_key"`
-	Sessionkey        string `toml:"session_key"`
+	Bind         string `toml:"bind"`
+	HostProtocol string `toml:"protocol"`
+	Sessionkey   string `toml:"session_key"`
 
 	TemplatePath string `toml:"template_path"`
 	StaticPath   string `toml:"static_path"`
