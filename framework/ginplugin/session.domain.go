@@ -182,9 +182,14 @@ func (s *sessionItem) recoverSessionItem() {
 			panic(err)
 		} else {
 			if data == nil {
-				data = map[string][]byte{}
+				// no data means session not existing in the store, have to initialize a new one
+				s.sessionId = NewSessionId()
+				s.data = map[string][]byte{}
+				s.s.prepareNewSession(s)
+			} else {
+				s.sessionId = valPair[1]
+				s.data = data
 			}
-			s.data = data
 		}
 	} else {
 		// invalid session, but we generate a new session id as if the session is new
